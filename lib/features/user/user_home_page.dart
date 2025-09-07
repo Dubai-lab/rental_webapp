@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rental_webapp/config/app_router.dart';
+import 'package:animations/animations.dart';
+import '../chat/chat_page.dart';
 import '../../models/shop_model.dart';
 import '../../models/request_model.dart';
 import '../../providers/auth_provider.dart';
@@ -72,6 +74,20 @@ class UserHomePage extends ConsumerWidget {
   ),
 ),
 
+      floatingActionButton: OpenContainer(
+        transitionDuration: const Duration(milliseconds: 500),
+        openBuilder: (context, _) => const ChatPage(),
+        closedBuilder: (context, openContainer) => FloatingActionButton(
+          onPressed: openContainer,
+          backgroundColor: Colors.blue,
+          child: const Badge(
+            label: Text("New"),
+            child: Icon(Icons.chat_bubble_outline, color: Colors.white),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: shopsAsync.when(

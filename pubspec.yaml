@@ -41,6 +41,10 @@ dependencies:
   image_picker: ^1.2.0
   firebase_storage: ^13.0.1
   provider: ^6.1.5+1
+  dialog_flowtter: ^0.2.0-nullsafety.0
+  animations: ^2.0.11
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +80,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/icon.png
+     - assets/credentials/dialogflow-credentials.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

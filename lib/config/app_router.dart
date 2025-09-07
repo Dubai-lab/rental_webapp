@@ -9,6 +9,7 @@ import 'package:rental_webapp/features/auth/forgot_password.dart';
 import 'package:rental_webapp/features/auth/login_page.dart';
 import 'package:rental_webapp/features/auth/signup_page.dart';
 import 'package:rental_webapp/features/auth/splash_page.dart';
+import 'package:rental_webapp/features/chat/chat_page.dart';
 import 'package:rental_webapp/features/user/my_rentals_page.dart';
 import 'package:rental_webapp/features/user/notifications_page.dart';
 import 'package:rental_webapp/features/user/profile_page.dart';
@@ -29,6 +30,7 @@ class AppRouter {
   static const String adminProfile = '/admin-profile';
   static const String notifications = '/notifications';
   static const String forgotPassword = '/forgot-password';
+  static const String chat = '/chat';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -60,6 +62,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const NotificationsPage());
         case forgotPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordPage());
+        case chat:
+        return MaterialPageRoute(builder: (_) => const ChatPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
@@ -110,4 +114,7 @@ class AppRouter {
 
   static void goToForgotPassword(BuildContext context) =>
       Navigator.pushNamed(context, forgotPassword);
+
+  static void goToChat(BuildContext context) =>
+      Navigator.pushNamed(context, chat);
 }

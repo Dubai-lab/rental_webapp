@@ -14,3 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+The method 'fromFile' isn't defined for the type 'DialogFlowtter'.
+Try correcting the name to the name of an existing method, or defining a method named 'fromFile'.dartundefined_method
+Type: InvalidType

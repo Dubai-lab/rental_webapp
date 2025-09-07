@@ -470,6 +470,29 @@ class TenantPage extends ConsumerWidget {
                   ),
                 ],
               ),
+
+              const SizedBox(height: 16),
+
+              // Remove Tenant Button
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => _removeTenant(context, ref, tenant, shop),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[600],
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      icon: const Icon(Icons.remove_circle, size: 18),
+                      label: const Text("Remove Tenant"),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -588,6 +611,56 @@ class TenantPage extends ConsumerWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Add tenant removal function
+  void _removeTenant(BuildContext context, WidgetRef ref, RentalRequestModel tenant, ShopModel shop) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove Tenant'),
+        content: const Text('Are you sure you want to remove this tenant and free the shop?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                // Update rental request status to 'terminated'
+                final rentalRequestService = ref.read(rentalRequestServiceProvider);
+                final shopService = ref.read(shopServiceProvider);
+
+                final updatedRequest = tenant.copyWith(status: 'terminated');
+                await rentalRequestService.updateRequest(updatedRequest);
+
+                // Update shop status to 'available' and clear tenantId
+                final updatedShop = shop.copyWith(status: 'available', tenantId: null);
+                await shopService.updateShop(updatedShop);
+
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Tenant removed and shop freed')),
+                );
+
+                // Refresh tenants list
+                ref.refresh(activeTenantsProvider);
+              } catch (e) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to remove tenant: $e')),
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+            child: const Text('Remove'),
           ),
         ],
       ),

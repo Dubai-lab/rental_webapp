@@ -357,10 +357,10 @@ class UserProfilePage extends ConsumerWidget {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              ref.read(currentUserProvider.notifier).logout();
+            onPressed: () async {
+              await ref.read(currentUserProvider.notifier).logout();
               Navigator.pop(context);
-              // Navigate to login page
+              AppRouter.goToLogin(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

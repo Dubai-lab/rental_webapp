@@ -192,7 +192,8 @@ class RentalRequestsPage extends ConsumerWidget {
                                       ),
                                     ),
                                   ],
-                                ),
+                                )
+
                             ],
                           ),
                         ),
@@ -241,9 +242,35 @@ class RentalRequestsPage extends ConsumerWidget {
   Future<void> _updateRequestStatus(
       WidgetRef ref, RentalRequestModel request, String status) async {
     final service = ref.read(rentalRequestServiceProvider);
+    final shopService = ref.read(shopServiceProvider);
+
+    // Update the request status
     await service.updateRequest(request.copyWith(
       status: status,
       updatedAt: DateTime.now(),
     ));
+
+    // Update shop status based on request status
+    if (status == 'approved') {
+      // Set shop to occupied and assign tenant
+      final shop = await shopService.getShopById(request.shopId);
+      final updatedShop = shop.copyWith(
+        status: 'occupied',
+        tenantId: request.userId,
+      );
+      await shopService.updateShop(updatedShop);
+    } else if (status == 'rejected') {
+      // Set shop back to available if it was pending
+      final shop = await shopService.getShopById(request.shopId);
+      if (shop.status == 'pending') {
+        final updatedShop = shop.copyWith(
+          status: 'available',
+          tenantId: null,
+        );
+        await shopService.updateShop(updatedShop);
+      }
+    }
   }
+
+
 }
